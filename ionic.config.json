@@ -1,5 +1,7 @@
 {
   "name": "ukens_timeplan",
-  "integrations": {},
+  "integrations": {
+    "cordova": {}
+  },
   "type": "angular"
 }

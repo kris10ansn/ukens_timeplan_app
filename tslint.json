@@ -8,7 +8,8 @@
     "arrow-parens": false,
     "deprecation": {
       "severity": "warn"
-    },
+	},
+	"indent": [ true, "tabs" ],
     "import-blacklist": [
       true,
       "rxjs/Rx"
@@ -58,7 +59,7 @@
     "ordered-imports": false,
     "quotemark": [
       true,
-      "single"
+      "double"
     ],
     "trailing-comma": false,
     "no-output-on-prefix": true,
