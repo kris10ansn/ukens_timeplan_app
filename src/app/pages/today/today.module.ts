@@ -7,6 +7,8 @@ import { IonicModule } from "@ionic/angular";
 
 import { TodayPage } from "./today.page";
 import { PinchZoomModule } from "ngx-pinch-zoom";
+import { MatSelectModule } from "@angular/material/select";
+import { MatInputModule } from "@angular/material/input";
 
 const routes: Routes = [
 	{
@@ -20,6 +22,8 @@ const routes: Routes = [
 		CommonModule,
 		FormsModule,
 		IonicModule,
+		MatSelectModule,
+		MatInputModule,
 		PinchZoomModule,
 		RouterModule.forChild(routes)
 	],

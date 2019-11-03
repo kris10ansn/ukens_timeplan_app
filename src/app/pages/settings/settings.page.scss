@@ -1,7 +1,27 @@
-ion-button {
-	position: relative;
-	left: 50%;
-	transform: translateX(-50%);
+div.content {
 	width: 95%;
-	margin: 10px 0;
+	margin: 0 2.5%;
+
+	ion-button.clear-cache {
+		position: relative;
+		left: 50%;
+		transform: translateX(-50%);
+		width: 100%;
+		margin: 10px 0;
+	}
+
+	div.id {
+		$margin: 7.5px;
+		$button-width: 20%;
+		width: 100%;
+		mat-form-field {
+			width: calc(100% - #{$button-width} - #{$margin * 2.5});
+			margin-right: $margin;
+		}
+
+		ion-button {
+			width: $button-width;
+			margin-left: $margin;
+		}
+	}
 }

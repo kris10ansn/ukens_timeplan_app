@@ -5,8 +5,16 @@
 </ion-header>
 
 <ion-content>
-	<ion-button (click)="this.clearCache($event)"
-		>{{ text }}
-		{{ sizeMB != null ? "(" + sizeMB + "MB" + ")" : "" }}</ion-button
-	>
+	<div class="content">
+		<ion-button class="clear-cache" (click)="this.clearCache($event)"
+			>{{ text }}
+			{{ sizeMB != null ? "(" + sizeMB + "MB" + ")" : "" }}</ion-button
+		>
+		<div class="id">
+			<mat-form-field>
+				<input matInput placeholder="User ID" />
+			</mat-form-field>
+			<ion-button color="light">OK</ion-button>
+		</div>
+	</div>
 </ion-content>

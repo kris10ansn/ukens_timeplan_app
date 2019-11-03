@@ -37,16 +37,9 @@ export class TodayPage implements OnInit {
 		this.src = await this.getTodaysPlan();
 	}
 
-	public async onDaySelect(event: Event) {
-		const target = event.target as HTMLInputElement;
-		const day = parseInt(target.value, 10);
-
-		if (day == null || isNaN(day)) {
-			return;
-		}
-
+	public async onDaySelect(event) {
+		const day = event.value;
 		this.day = day;
-		target.blur();
 
 		this.src = null;
 		this.src = await this.getTodaysPlan();

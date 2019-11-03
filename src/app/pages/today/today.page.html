@@ -11,16 +11,18 @@
 					<ion-label>Week</ion-label>
 				</ion-input>
 			</div>
-			<ion-select
-				value="{{ day }}"
-				(ionChange)="this.onDaySelect($event)"
-			>
-				<ion-select-option value="1">Monday</ion-select-option>
-				<ion-select-option value="2">Tuesday</ion-select-option>
-				<ion-select-option value="3">Wednesday</ion-select-option>
-				<ion-select-option value="4">Thursday</ion-select-option>
-				<ion-select-option value="5">Friday</ion-select-option>
-			</ion-select>
+			<mat-form-field class="day-select">
+				<mat-select
+					value="{{ day }}"
+					(selectionChange)="this.onDaySelect($event)"
+				>
+					<mat-option value="1">Monday</mat-option>
+					<mat-option value="2">Tuesday</mat-option>
+					<mat-option value="3">Wednesday</mat-option>
+					<mat-option value="4">Thursday</mat-option>
+					<mat-option value="5">Friday</mat-option>
+				</mat-select>
+			</mat-form-field>
 		</div>
 	</ion-toolbar>
 </ion-header>

@@ -11,12 +11,17 @@ import { AppComponent } from "./app.component";
 import { Downloader } from "@ionic-native/downloader/ngx";
 import { WebView } from "@ionic-native/ionic-webview/ngx";
 import { File } from "@ionic-native/file/ngx";
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 
 @NgModule({
 	declarations: [AppComponent],
 	entryComponents: [],
-	imports: [BrowserModule, IonicModule.forRoot(), AppRoutingModule, BrowserAnimationsModule],
+	imports: [
+		BrowserModule,
+		IonicModule.forRoot(),
+		AppRoutingModule,
+		BrowserAnimationsModule
+	],
 	providers: [
 		StatusBar,
 		SplashScreen,
