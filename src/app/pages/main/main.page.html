@@ -1,7 +1,27 @@
+<ion-header>
+	<ion-toolbar>
+		<ion-title>Today</ion-title>
+		<div class="input" slot="primary" *ngIf="this.week">
+			<ion-input
+				placeholder="{{ week }}"
+				type="number"
+				(change)="this.onWeekInput($event)"
+			>
+				<ion-label>Week</ion-label>
+			</ion-input>
+		</div>
+	</ion-toolbar>
+</ion-header>
+
 <ion-content>
-	<div class="content">
+	<div class="content" *ngIf="src != null">
 		<pinch-zoom>
-			<img id="view" src="{{ imageSrc }}" />
+			<img id="view" [src]="src" />
 		</pinch-zoom>
+	</div>
+
+	<div class="status" *ngIf="src == null">
+		<ion-spinner name="dots" color="primary"></ion-spinner>
+		<p class="status-message">{{ status || "" }}</p>
 	</div>
 </ion-content>

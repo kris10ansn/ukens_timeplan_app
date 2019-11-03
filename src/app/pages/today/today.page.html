@@ -1,1 +1,37 @@
-<ion-content></ion-content>
+<ion-header>
+	<ion-toolbar>
+		<ion-title>Today</ion-title>
+		<div class="options" slot="primary">
+			<div class="input" *ngIf="this.week">
+				<ion-input
+					type="number"
+					placeholder="{{ week }}"
+					(change)="this.onWeekInput($event)"
+				>
+					<ion-label>Week</ion-label>
+				</ion-input>
+			</div>
+			<ion-select
+				value="{{ day }}"
+				(ionChange)="this.onDaySelect($event)"
+			>
+				<ion-select-option value="1">Monday</ion-select-option>
+				<ion-select-option value="2">Tuesday</ion-select-option>
+				<ion-select-option value="3">Wednesday</ion-select-option>
+				<ion-select-option value="4">Thursday</ion-select-option>
+				<ion-select-option value="5">Friday</ion-select-option>
+			</ion-select>
+		</div>
+	</ion-toolbar>
+</ion-header>
+<ion-content>
+	<div *ngIf="src != null">
+		<pinch-zoom>
+			<img [src]="src" alt="" />
+		</pinch-zoom>
+	</div>
+	<div *ngIf="src == null" class="status">
+		<ion-spinner name="dots" color="primary"></ion-spinner>
+		<p class="status-message">{{ status }}</p>
+	</div>
+</ion-content>

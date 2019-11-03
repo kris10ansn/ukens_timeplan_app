@@ -1,0 +1,12 @@
+<ion-header>
+	<ion-toolbar>
+		<ion-title>Settings</ion-title>
+	</ion-toolbar>
+</ion-header>
+
+<ion-content>
+	<ion-button (click)="this.clearCache($event)"
+		>{{ text }}
+		{{ sizeMB != null ? "(" + sizeMB + "MB" + ")" : "" }}</ion-button
+	>
+</ion-content>

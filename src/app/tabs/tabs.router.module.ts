@@ -6,7 +6,7 @@ const routes: Routes = [
 	{
 		path: "",
 		pathMatch: "full",
-		redirectTo: "/tabs/main"
+		redirectTo: "/tabs/today"
 	},
 	{
 		path: "tabs",
@@ -21,12 +21,13 @@ const routes: Routes = [
 				loadChildren: "../pages/main/main.module#MainPageModule"
 			},
 			{
-				path: "all",
-				loadChildren: "../pages/all/all.module#AllPageModule"
+				path: "settings",
+				loadChildren:
+					"../pages/settings/settings.module#SettingsPageModule"
 			},
 			{
 				path: "",
-				redirectTo: "/tabs/main",
+				redirectTo: "/tabs/today",
 				pathMatch: "full"
 			}
 		]
