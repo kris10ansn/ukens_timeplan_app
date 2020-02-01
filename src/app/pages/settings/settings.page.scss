@@ -1,27 +1,26 @@
-div.content {
-	width: 95%;
-	margin: 0 2.5%;
+.content {
+	// p.under-title {
+	// 	// margin-bottom: 0;
+	// }
 
-	ion-button.clear-cache {
-		position: relative;
-		left: 50%;
-		transform: translateX(-50%);
+	padding: 8px;
+	.delete-cache {
 		width: 100%;
-		margin: 10px 0;
+		font-size: 18px;
 	}
-
-	div.id {
-		$margin: 7.5px;
-		$button-width: 20%;
+	.link-form {
+		padding-bottom: 16px;
 		width: 100%;
-		mat-form-field {
-			width: calc(100% - #{$button-width} - #{$margin * 2.5});
-			margin-right: $margin;
+		display: flex;
+		flex-direction: row;
+		.link-input {
+			width: 80%;
 		}
 
-		ion-button {
-			width: $button-width;
-			margin-left: $margin;
+		.link-submit {
+			width: 16%;
+			margin-top: 10px;
+			margin-left: 10px;
 		}
 	}
 }

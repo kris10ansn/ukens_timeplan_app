@@ -1,7 +1,8 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, OnInit, ViewChild, ElementRef } from "@angular/core";
 import { TimeplanService } from "src/app/services/timeplan.service";
-import { Platform } from "@ionic/angular";
+import { Platform, IonInput } from "@ionic/angular";
 import { TimeService } from "src/app/services/time.service";
+import { Router } from "@angular/router";
 
 @Component({
 	selector: "app-main",
@@ -19,7 +20,8 @@ export class MainPage implements OnInit {
 	constructor(
 		private platform: Platform,
 		private timeplan: TimeplanService,
-		private time: TimeService
+		private time: TimeService,
+		private router: Router
 	) {}
 
 	public async ngOnInit() {
@@ -28,14 +30,22 @@ export class MainPage implements OnInit {
 
 	public async onWeekInput(event: Event) {
 		const target = event.target as HTMLInputElement;
+		target.blur();
 		const week = parseInt(target.value, 10);
 		this.week = week;
-		target.blur();
 
-		this.src = null;
-		this.src = await this.loadPlan();
+		this.reload();
 
 		target.value = "";
+	}
+
+	public async reload() {
+		this.src = null;
+		this.src = await this.loadPlan();
+	}
+
+	public openSettings() {
+		this.router.navigate(["settings"]);
 	}
 
 	private async loadPlan() {

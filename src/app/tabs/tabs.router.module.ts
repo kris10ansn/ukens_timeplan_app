@@ -6,10 +6,10 @@ const routes: Routes = [
 	{
 		path: "",
 		pathMatch: "full",
-		redirectTo: "/tabs/today"
+		redirectTo: "today"
 	},
 	{
-		path: "tabs",
+		path: "",
 		component: TabsPage,
 		children: [
 			{
@@ -19,11 +19,6 @@ const routes: Routes = [
 			{
 				path: "main",
 				loadChildren: "../pages/main/main.module#MainPageModule"
-			},
-			{
-				path: "settings",
-				loadChildren:
-					"../pages/settings/settings.module#SettingsPageModule"
 			},
 			{
 				path: "",

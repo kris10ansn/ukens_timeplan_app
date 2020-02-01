@@ -2,6 +2,7 @@ import { Injectable } from "@angular/core";
 import { Downloader } from "@ionic-native/downloader/ngx";
 import { WebView } from "@ionic-native/ionic-webview/ngx";
 import { File } from "@ionic-native/file/ngx";
+import { UserInfoService } from "./user-info.service";
 
 @Injectable({
 	providedIn: "root"
@@ -10,7 +11,8 @@ export class TimeplanService {
 	constructor(
 		private downloader: Downloader,
 		private webview: WebView,
-		private file: File
+		private file: File,
+		private userInfo: UserInfoService
 	) {}
 
 	public async base64(week: number, width: number, height: number) {
@@ -19,7 +21,10 @@ export class TimeplanService {
 			webPath: string;
 			filename: string;
 		}>(async (resolve, reject) => {
-			const filename = `full-timeplan${width}x${height}-${week}.png`;
+			const userid = await this.userInfo.userId();
+			const schoolid = await this.userInfo.schoolId();
+
+			const filename = `full-timeplan${width}x${height}-${week}-${userid}-school${schoolid}.png`;
 			const dir = this.file.externalDataDirectory;
 
 			const fileCached = await this.file
@@ -35,8 +40,8 @@ export class TimeplanService {
 			} else {
 				const url =
 					"http://www.novasoftware.se/" +
-					"ImgGen/schedulegenerator.aspx?format=png&schoolid=60870/" +
-					"nb-no&id={01D16CA5-3F31-4CA7-B678-221FC5160B4C}&period=" +
+					`ImgGen/schedulegenerator.aspx?format=png&schoolid=${schoolid}/` +
+					`nb-no&id=${userid}&period=` +
 					`&width=${width}&height=${height}&week=${week}`;
 
 				const localPath = (await this.downloader

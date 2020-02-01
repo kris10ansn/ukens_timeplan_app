@@ -1,28 +1,25 @@
 <ion-header>
 	<ion-toolbar>
-		<ion-title>Today</ion-title>
+		<ion-title>I Dag</ion-title>
 		<div class="options" slot="primary">
-			<div class="input" *ngIf="this.week">
-				<ion-input
-					type="number"
-					placeholder="{{ week }}"
-					(change)="this.onWeekInput($event)"
-				>
-					<ion-label>Week</ion-label>
-				</ion-input>
-			</div>
 			<mat-form-field class="day-select">
-				<mat-select
-					value="{{ day }}"
-					(selectionChange)="this.onDaySelect($event)"
-				>
-					<mat-option value="1">Monday</mat-option>
-					<mat-option value="2">Tuesday</mat-option>
-					<mat-option value="3">Wednesday</mat-option>
-					<mat-option value="4">Thursday</mat-option>
-					<mat-option value="5">Friday</mat-option>
+				<mat-select value="{{ day }}" (selectionChange)="this.onDaySelect($event)">
+					<mat-option value="1">Mandag</mat-option>
+					<mat-option value="2">Tirsdag</mat-option>
+					<mat-option value="3">Onsdag</mat-option>
+					<mat-option value="4">Torsdag</mat-option>
+					<mat-option value="5">Fredag</mat-option>
 				</mat-select>
 			</mat-form-field>
+			<div class="input" *ngIf="this.week">
+				<ion-input class="week-input" type="number" placeholder="{{ week }}"
+					(change)="this.onWeekInput($event)">
+					<ion-label>Uke</ion-label>
+				</ion-input>
+			</div>
+			<ion-button (click)="openSettings()" class="icon" shape="round" fill="none">
+				<ion-icon name="settings"></ion-icon>
+			</ion-button>
 		</div>
 	</ion-toolbar>
 </ion-header>

@@ -1,20 +1,19 @@
 <ion-header>
 	<ion-toolbar>
-		<ion-title>Settings</ion-title>
+		<ion-title>Instillinger</ion-title>
+		<ion-buttons slot="start">
+			<ion-back-button></ion-back-button>
+		</ion-buttons>
 	</ion-toolbar>
 </ion-header>
 
 <ion-content>
 	<div class="content">
-		<ion-button class="clear-cache" (click)="this.clearCache($event)"
-			>{{ text }}
-			{{ sizeMB != null ? "(" + sizeMB + "MB" + ")" : "" }}</ion-button
-		>
-		<div class="id">
-			<mat-form-field>
-				<input matInput placeholder="User ID" />
-			</mat-form-field>
-			<ion-button color="light">OK</ion-button>
+		<p class="under-title">Webviewer link</p>
+		<div class="link-form">	
+			<app-link-input #linkInput class="link-input"></app-link-input>
+			<ion-button class="link-submit" color="light" (click)="this.submit()">OK</ion-button>
 		</div>
+		<ion-button class="delete-cache" (click)="deleteCache()">Slett lagrede timeplaner</ion-button>
 	</div>
 </ion-content>

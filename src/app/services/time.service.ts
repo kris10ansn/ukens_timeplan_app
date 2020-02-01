@@ -22,7 +22,7 @@ export class TimeService {
 		return new Date().getMinutes();
 	}
 
-	public getWeekNumber(date: Date) {
+	private getWeekNumber(date: Date) {
 		// Copy date so don't modify original
 		date = new Date(
 			Date.UTC(date.getFullYear(), date.getMonth(), date.getDate())

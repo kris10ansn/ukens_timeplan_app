@@ -12,6 +12,13 @@ import { Downloader } from "@ionic-native/downloader/ngx";
 import { WebView } from "@ionic-native/ionic-webview/ngx";
 import { File } from "@ionic-native/file/ngx";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
+import { IonicStorageModule } from "@ionic/storage";
+
+import { MatInputModule } from "@angular/material/input";
+
+import { HTTP } from "@ionic-native/http/ngx";
+import { ReactiveFormsModule, FormsModule } from "@angular/forms";
+import { LinkInputComponent } from "./components/link-input/link-input.component";
 
 @NgModule({
 	declarations: [AppComponent],
@@ -19,6 +26,7 @@ import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 	imports: [
 		BrowserModule,
 		IonicModule.forRoot(),
+		IonicStorageModule.forRoot(),
 		AppRoutingModule,
 		BrowserAnimationsModule
 	],
@@ -28,6 +36,7 @@ import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 		Downloader,
 		WebView,
 		File,
+		HTTP,
 		{ provide: RouteReuseStrategy, useClass: IonicRouteStrategy }
 	],
 	bootstrap: [AppComponent]

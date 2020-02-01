@@ -1,14 +1,15 @@
 <ion-header>
 	<ion-toolbar>
-		<ion-title>Today</ion-title>
-		<div class="input" slot="primary" *ngIf="this.week">
-			<ion-input
-				placeholder="{{ week }}"
-				type="number"
-				(change)="this.onWeekInput($event)"
-			>
-				<ion-label>Week</ion-label>
-			</ion-input>
+		<ion-title>Ukas timeplan</ion-title>
+		<div class="options" slot="primary">
+			<div class="input" *ngIf="this.week">
+				<ion-input placeholder="{{ week }}" type="number" (change)="this.onWeekInput($event)">
+					<ion-label>Uke</ion-label>
+				</ion-input>
+			</div>
+			<ion-button (click)="openSettings()" class="icon" shape="round" fill="none">
+				<ion-icon name="settings"></ion-icon>
+			</ion-button>
 		</div>
 	</ion-toolbar>
 </ion-header>

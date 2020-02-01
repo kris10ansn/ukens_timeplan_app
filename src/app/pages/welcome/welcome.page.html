@@ -1,0 +1,38 @@
+<div class="content">
+	<h1>Velkommen!</h1>
+
+	<p>
+		Lim inn en link til timeplanen din ( skolearena > timeplan i webviewer )
+		og sett i gang!
+	</p>
+
+	<!-- <mat-form-field class="link">
+		<input matInput #linkInput placeholder="Link til timeplan i webviewer" [formControl]="email" />
+		<mat-hint>
+			Gå til timeplanen og kopier link fra søkefeltet
+		</mat-hint>
+		<mat-error *ngIf="this.email.hasError('pattern')">Ugyldig nettadresse</mat-error>
+		<mat-error *ngIf="this.email.hasError('required')">Link er nødvendig</mat-error>
+	</mat-form-field> -->
+
+	<app-link-input #linkInput></app-link-input>
+
+	<img class="fill-in" src="../../../assets/images/fill_in.svg" alt="" />
+
+	<div class="done-btn">
+		<ion-spinner
+			*ngIf="linkInput.processing"
+			name="crescent"
+			color="primary"
+		></ion-spinner>
+		<ion-button
+			*ngIf="!linkInput.processing"
+			(click)="doneButton()"
+			class="done"
+			color="primary"
+			[disabled]="linkInput.pattern.errors ? true : false"
+		>
+			Ferdig</ion-button
+		>
+	</div>
+</div>

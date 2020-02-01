@@ -7,6 +7,13 @@ div.content {
 	}
 }
 
+div.options {
+	display: flex;
+	width: fit-content;
+	height: 56px;
+	margin-right: 5px;
+}
+
 div.status {
 	width: 100%;
 	position: relative;
@@ -28,7 +35,25 @@ div.status {
 		transform: scale(2) translateX(-25%) !important;
 	}
 }
+
 div.input {
-	width: 65px;
+	width: 55px;
 	margin-right: 15px;
+
+	position: relative;
+	top: 65%;
+	transform: translateY(-50%);
+	ion-input {
+		width: 100%;
+	}
+}
+
+.icon {
+	position: relative;
+	top: 50%;
+	transform: translateY(-50%);
+	height: 50%;
+	margin: 0;
+	--padding-start: 6px;
+	--padding-end: 6px;
 }

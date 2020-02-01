@@ -7,6 +7,8 @@ import { BlobGeneratorService } from "src/app/services/blob-generator.service";
 import { DomSanitizer, SafeUrl } from "@angular/platform-browser";
 import { TimeService } from "src/app/services/time.service";
 import { WebView } from "@ionic-native/ionic-webview/ngx";
+import { UserInfoService } from "src/app/services/user-info.service";
+import { Router } from "@angular/router";
 
 @Component({
 	selector: "app-today",
@@ -16,11 +18,13 @@ import { WebView } from "@ionic-native/ionic-webview/ngx";
 export class TodayPage implements OnInit {
 	public week: number;
 	public day: number;
-	public src: SafeUrl;
 	public status: string;
+	public src: SafeUrl;
 
 	private deviceWidth: number;
 	private deviceHeight: number;
+
+	private recursion = 0;
 
 	constructor(
 		private platform: Platform,
@@ -29,11 +33,13 @@ export class TodayPage implements OnInit {
 		private blob: BlobGeneratorService,
 		private sanitizer: DomSanitizer,
 		private webview: WebView,
-		private time: TimeService
+		private time: TimeService,
+		private userInfo: UserInfoService,
+		private router: Router
 	) {}
 
 	public async ngOnInit() {
-		this.status = "Loading...";
+		this.status = "Laster...";
 		this.src = await this.getTodaysPlan();
 	}
 
@@ -41,8 +47,16 @@ export class TodayPage implements OnInit {
 		const day = event.value;
 		this.day = day;
 
+		this.reload();
+	}
+
+	public async reload() {
 		this.src = null;
 		this.src = await this.getTodaysPlan();
+	}
+
+	public openSettings() {
+		this.router.navigate(["settings"]);
 	}
 
 	public async onWeekInput(event: Event) {
@@ -58,7 +72,7 @@ export class TodayPage implements OnInit {
 	}
 
 	private async getTodaysPlan() {
-		return new Promise(async resolve => {
+		return new Promise(async (resolve, reject) => {
 			if (!this.deviceWidth || !this.deviceHeight) {
 				this.deviceWidth = this.platform.width();
 				this.deviceHeight = this.platform.height();
@@ -87,14 +101,21 @@ export class TodayPage implements OnInit {
 				day = this.day;
 			} else if (day > 5 || day === 0) {
 				day = 1;
-			} else if ((hours > 15 || hours + minutes >= 30) && day !== 5) {
+			} else if (
+				(hours > 15 || (hours === 15 && minutes > 15)) &&
+				day !== 5
+			) {
 				// Schoolday is over, show next day
 				day++;
 			}
 
 			this.day = day;
 
-			const filename = `day-timeplan${width}x${height}-${week}-${day}.png`;
+			const userid = await this.userInfo.userId();
+			const schoolid = await this.userInfo.schoolId();
+
+			const filename = `day-timeplan${width}x${height}-${week}-${day}-${userid}-school${schoolid}.png`;
+
 			const filecached = await this.file
 				.checkFile(this.file.externalDataDirectory, filename)
 				.catch(_ => false);
@@ -106,24 +127,43 @@ export class TodayPage implements OnInit {
 				return resolve(path);
 			}
 
-			this.status = "Getting this weeks plan...";
-			const {
-				localPath,
-				filename: timeplanFile
-			} = (await this.timeplan
+			this.status = "Henter planen...";
+			const response = await this.timeplan
 				.base64(week, width * 5, height)
-				.catch(error => console.error(error))) as any;
+				.catch(error => {
+					this.status = error;
+					throw error;
+				});
 
-			this.status = "Cropping plan...";
+			const { localPath } = response as any;
 
-			const buffer = await this.file.readAsArrayBuffer(
-				localPath.replace(timeplanFile, ""),
-				timeplanFile
-			);
+			this.status = "Beskjærer plan...";
+
+			const chunks = localPath.split("/");
+			const dir = localPath.replace(chunks[chunks.length - 1], "");
+			const timeplanFile = chunks[chunks.length - 1];
+
+			let ret = false;
+			const buffer = await this.file
+				.readAsArrayBuffer(dir, timeplanFile)
+				.catch(error => {
+					console.error(error);
+					if (this.recursion < 3) {
+						console.log("reloading");
+						ret = true;
+						this.recursion++;
+						this.status = "Prøver på ny...";
+						this.reload();
+					}
+				});
+
+			if (ret) {
+				return;
+			}
 
 			const base64 = await Jimp.read(buffer as any).then(image => {
 				return image
-					.crop(width * (day - 1), 0, width, height)
+					.crop(width * (day - 1), 0, width - 5, height)
 					.getBase64Async(image.getMIME());
 			});
 

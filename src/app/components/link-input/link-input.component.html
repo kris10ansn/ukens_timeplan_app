@@ -1,0 +1,9 @@
+<mat-form-field class="link">
+	<input matInput #linkInput placeholder="Link til timeplan i webviewer" [formControl]="pattern" />
+	<mat-hint>
+		Gå til timeplanen og kopier link fra søkefeltet
+	</mat-hint>
+	<mat-error *ngIf="this.pattern.hasError('pattern')">Ugyldig nettadresse</mat-error>
+	<mat-error *ngIf="this.pattern.hasError('required')">Link er nødvendig</mat-error>
+	<mat-error *ngIf="this.processingError">Error</mat-error>
+</mat-form-field>

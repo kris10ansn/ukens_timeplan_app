@@ -6,7 +6,8 @@ import { Routes, RouterModule } from "@angular/router";
 import { IonicModule } from "@ionic/angular";
 
 import { SettingsPage } from "./settings.page";
-import { MatInputModule } from "@angular/material/input";
+import { LinkInputComponent } from "src/app/components/link-input/link-input.component";
+import { ComponentsModule } from "src/app/components/components.module";
 
 const routes: Routes = [
 	{
@@ -20,8 +21,8 @@ const routes: Routes = [
 		CommonModule,
 		FormsModule,
 		IonicModule,
-		MatInputModule,
-		RouterModule.forChild(routes)
+		RouterModule.forChild(routes),
+		ComponentsModule
 	],
 	declarations: [SettingsPage]
 })
