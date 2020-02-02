@@ -21,6 +21,7 @@ export class TimeplanService {
 			webPath: string;
 			filename: string;
 		}>(async (resolve, reject) => {
+			console.log("base64 call timeplan service");
 			const userid = await this.userInfo.userId();
 			const schoolid = await this.userInfo.schoolId();
 
@@ -50,6 +51,8 @@ export class TimeplanService {
 						destinationUri: dir + filename
 					})
 					.catch((error: any) => reject(error))) as string;
+
+				console.log(localPath);
 
 				const webPath = this.webview
 					.convertFileSrc(localPath)

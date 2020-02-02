@@ -29,13 +29,23 @@ export class SettingsPage implements OnInit {
 	public async deleteCache() {
 		const dir = this.file.externalDataDirectory;
 
-		const files = this.file.listDir(dir, "");
+		const files = await this.file.listDir(dir, "");
 
-		// tslint:disable-next-line: forin
-		for (const file in files) {
-			console.log(file);
-		}
+		files.forEach(async file => {
+			if (file.isFile) {
+				console.log(file);
 
-		this.file.removeRecursively(dir, "");
+				const parts = file.nativeURL.split("/");
+				const filename = parts[parts.length - 1];
+				const path = file.nativeURL.replace(filename, "");
+
+				const checkFile = await this.file.checkFile(path, filename);
+				console.log("Exists: ", checkFile);
+
+				const removeFile = await this.file
+					.removeFile(path, filename)
+					.catch(console.log);
+			}
+		});
 	}
 }
