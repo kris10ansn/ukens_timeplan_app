@@ -12,7 +12,6 @@ export class LinkInputComponent {
 	public element: ElementRef;
 
 	public pattern = new FormControl("", [
-		Validators.required,
 		Validators.pattern(
 			/(((https)|(http))\:\/\/)?(www.)?novasoftware.se\/webviewer\/\(S\(.*\)\)\/.*/i
 		)
@@ -39,6 +38,7 @@ export class LinkInputComponent {
 			if (userInfo == null) {
 				this.processingError = true;
 			} else {
+				console.log(userInfo);
 				resolve(userInfo);
 			}
 

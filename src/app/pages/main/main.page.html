@@ -15,6 +15,10 @@
 </ion-header>
 
 <ion-content>
+	<ion-refresher slot="fixed" (ionRefresh)="ionRefresh($event)">
+		<ion-refresher-content></ion-refresher-content>
+	</ion-refresher>
+
 	<div class="content" *ngIf="src != null">
 		<pinch-zoom>
 			<img id="view" [src]="src" />

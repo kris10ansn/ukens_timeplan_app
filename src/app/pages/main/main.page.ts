@@ -1,8 +1,15 @@
-import { Component, OnInit, ViewChild, ElementRef } from "@angular/core";
+import {
+	Component,
+	OnInit,
+	ViewChild,
+	ElementRef,
+	AfterViewInit
+} from "@angular/core";
 import { TimeplanService } from "src/app/services/timeplan.service";
-import { Platform, IonInput } from "@ionic/angular";
+import { Platform, IonInput, IonRefresher } from "@ionic/angular";
 import { TimeService } from "src/app/services/time.service";
 import { Router } from "@angular/router";
+import { AdMobService } from "src/app/services/admob.service";
 
 @Component({
 	selector: "app-main",
@@ -10,6 +17,9 @@ import { Router } from "@angular/router";
 	styleUrls: ["./main.page.scss"]
 })
 export class MainPage implements OnInit {
+	@ViewChild(IonRefresher, { static: false })
+	refresher: IonRefresher;
+
 	public week: number;
 	public src: string;
 	public status: string;
@@ -21,11 +31,40 @@ export class MainPage implements OnInit {
 		private platform: Platform,
 		private timeplan: TimeplanService,
 		private time: TimeService,
-		private router: Router
+		private router: Router,
+		private adMob: AdMobService
 	) {}
 
 	public async ngOnInit() {
 		this.src = await this.loadPlan();
+
+		const r = Math.floor(Math.random() * 5);
+
+		if (r > 1) {
+			this.adMob.showInterstitial();
+		}
+	}
+
+	public ionViewDidEnter() {
+		this.refresher.disabled = false;
+	}
+
+	public ionViewWillLeave() {
+		this.refresher.disabled = true;
+	}
+
+	public async reload() {
+		this.src = null;
+		this.src = await this.loadPlan();
+	}
+
+	public async ionRefresh(event) {
+		setTimeout(() => {
+			event.target.complete();
+		}, 175);
+
+		this.src = null;
+		this.src = await this.loadPlan(false);
 	}
 
 	public async onWeekInput(event: Event) {
@@ -37,18 +76,19 @@ export class MainPage implements OnInit {
 		this.reload();
 
 		target.value = "";
-	}
 
-	public async reload() {
-		this.src = null;
-		this.src = await this.loadPlan();
+		const r = Math.floor(Math.random() * 5);
+
+		if (r > 1) {
+			this.adMob.showInterstitial();
+		}
 	}
 
 	public openSettings() {
 		this.router.navigate(["settings"]);
 	}
 
-	private async loadPlan() {
+	private async loadPlan(useCache: boolean = true) {
 		return new Promise<string>(async (resolve, reject) => {
 			if (!this.deviceWidth || !this.deviceHeight) {
 				this.deviceWidth = this.platform.width();
@@ -73,7 +113,7 @@ export class MainPage implements OnInit {
 			}
 
 			const { webPath } = await this.timeplan
-				.base64(week, width, height)
+				.base64(week, width, height, useCache)
 				.catch(error => {
 					this.status = `Error: "${error}"`;
 					reject(null);

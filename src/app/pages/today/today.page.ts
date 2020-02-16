@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild, ElementRef } from "@angular/core";
-import { Platform, IonContent } from "@ionic/angular";
+import { Platform, IonContent, IonRefresher } from "@ionic/angular";
 import { TimeplanService } from "src/app/services/timeplan.service";
 import Jimp from "jimp";
 import { File } from "@ionic-native/file/ngx";
@@ -9,6 +9,7 @@ import { TimeService } from "src/app/services/time.service";
 import { WebView } from "@ionic-native/ionic-webview/ngx";
 import { UserInfoService } from "src/app/services/user-info.service";
 import { Router } from "@angular/router";
+import { AdMobService } from "src/app/services/admob.service";
 
 @Component({
 	selector: "app-today",
@@ -16,6 +17,9 @@ import { Router } from "@angular/router";
 	styleUrls: ["./today.page.scss"]
 })
 export class TodayPage implements OnInit {
+	@ViewChild(IonRefresher, { static: false })
+	refresher: IonRefresher;
+
 	public week: number;
 	public day: number;
 	public status: string;
@@ -23,8 +27,6 @@ export class TodayPage implements OnInit {
 
 	private deviceWidth: number;
 	private deviceHeight: number;
-
-	private recursion = 0;
 
 	constructor(
 		private platform: Platform,
@@ -35,7 +37,8 @@ export class TodayPage implements OnInit {
 		private webview: WebView,
 		private time: TimeService,
 		private userInfo: UserInfoService,
-		private router: Router
+		private router: Router,
+		private adMob: AdMobService
 	) {}
 
 	public async ngOnInit() {
@@ -43,16 +46,40 @@ export class TodayPage implements OnInit {
 		this.src = await this.getTodaysPlan();
 	}
 
-	public async onDaySelect(event) {
-		const day = event.value;
-		this.day = day;
+	public ionViewDidEnter() {
+		this.refresher.disabled = false;
+	}
 
-		this.reload();
+	public ionViewWillLeave() {
+		this.refresher.disabled = true;
 	}
 
 	public async reload() {
 		this.src = null;
 		this.src = await this.getTodaysPlan();
+	}
+
+	public async ionRefresh(event) {
+		setTimeout(() => {
+			event.target.complete();
+		}, 175);
+
+		this.src = null;
+		this.src = await this.getTodaysPlan(false);
+	}
+
+	public async onDaySelect(event) {
+		const day = event.value;
+		this.day = day;
+
+		this.reload();
+
+		const { floor, random } = Math;
+		const r = floor(random() * 5);
+
+		if (r > 1) {
+			this.adMob.showInterstitial();
+		}
 	}
 
 	public openSettings() {
@@ -71,7 +98,7 @@ export class TodayPage implements OnInit {
 		target.value = "";
 	}
 
-	private async getTodaysPlan() {
+	private async getTodaysPlan(useCache = true) {
 		return new Promise(async (resolve, reject) => {
 			if (!this.deviceWidth || !this.deviceHeight) {
 				this.deviceWidth = this.platform.width();
@@ -81,7 +108,7 @@ export class TodayPage implements OnInit {
 			const x = 1.25;
 			const width = Math.round(this.deviceWidth * x);
 			const height = Math.round(
-				this.deviceHeight * x - (this.deviceHeight * x) / 10
+				this.deviceHeight * x - (this.deviceHeight * x) / 8
 			);
 
 			let week, day;
@@ -117,21 +144,22 @@ export class TodayPage implements OnInit {
 			const filename = `day-timeplan${width}x${height}-${week}-${day}-${userid}-school${schoolid}.png`;
 
 			const filecached = await this.file
-				.checkFile(this.file.externalDataDirectory, filename)
+				.checkFile(this.file.externalCacheDirectory, filename)
 				.catch(_ => false);
 
-			if (filecached) {
+			if (filecached && useCache) {
 				const path = this.webview
-					.convertFileSrc(this.file.externalDataDirectory + filename)
+					.convertFileSrc(this.file.externalCacheDirectory + filename)
 					.replace("undefined", "http://localhost");
+
 				return resolve(path);
 			}
 
 			this.status = "Henter planen...";
 			const response = await this.timeplan
-				.base64(week, width * 5, height)
+				.base64(week, width * 5, height, useCache)
 				.catch(error => {
-					this.status = error;
+					this.status = `Error: ${error}, prøv å laste inn på nytt`;
 					throw error;
 				});
 
@@ -148,24 +176,31 @@ export class TodayPage implements OnInit {
 				.readAsArrayBuffer(dir, timeplanFile)
 				.catch(error => {
 					console.error(error);
-					if (this.recursion < 3) {
-						console.log("reloading");
-						ret = true;
-						this.recursion++;
-						this.status = "Prøver på ny...";
-						this.reload();
-					}
+					ret = true;
 				});
 
 			if (ret) {
-				return;
+				this.status = "Prøver på ny...";
+				return this.reload();
 			}
 
-			const base64 = await Jimp.read(buffer as any).then(image => {
-				return image
-					.crop(width * (day - 1), 0, width - 5, height)
-					.getBase64Async(image.getMIME());
-			});
+			const base64 = await Jimp.read(buffer as any)
+				.then(image => {
+					return image
+						.crop(width * (day - 1), 0, width - 5, height)
+						.getBase64Async(image.getMIME());
+				})
+				.catch(error => {
+					console.error(error);
+
+					ret = true;
+					return null;
+				});
+
+			if (ret) {
+				this.status = "Prøver på ny...";
+				return this.reload();
+			}
 
 			this.status = "Loading";
 
@@ -176,7 +211,7 @@ export class TodayPage implements OnInit {
 			resolve(this.sanitizer.bypassSecurityTrustUrl(blobUrl));
 
 			this.file.writeFile(
-				this.file.externalDataDirectory,
+				this.file.externalCacheDirectory,
 				filename,
 				blob,
 				{ replace: true }

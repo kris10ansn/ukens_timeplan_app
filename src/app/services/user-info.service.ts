@@ -35,7 +35,8 @@ export class UserInfoService {
 				"select#ScheduleIDDropDownList"
 			) as HTMLSelectElement;
 
-			const userId = studentSelect.value;
+			const userId =
+				Number(studentSelect.value) > 0 ? studentSelect.value : null;
 			const schoolId = uri.searchParams.get("schoolid");
 
 			if (userId && schoolId) {
@@ -54,14 +55,25 @@ export class UserInfoService {
 		route: ActivatedRouteSnapshot,
 		state: RouterStateSnapshot
 	): Promise<boolean> {
-		return new Promise<boolean>(async (resolve, reject) => {
+		const promise = this.isAuthenticated();
+
+		promise.then(authenticated => {
+			if (!authenticated) {
+				this.router.navigate(["welcome"]);
+			}
+		});
+
+		return promise;
+	}
+
+	public async isAuthenticated() {
+		return new Promise<boolean>(async resolve => {
 			const userid = await this.storage.get("userid");
 			const schoolid = await this.storage.get("schoolid");
 
 			if (userid && schoolid) {
 				return resolve(true);
 			} else {
-				this.router.navigate(["welcome"]);
 				return resolve(false);
 			}
 		});

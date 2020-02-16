@@ -3,7 +3,10 @@
 		<ion-title>I Dag</ion-title>
 		<div class="options" slot="primary">
 			<mat-form-field class="day-select">
-				<mat-select value="{{ day }}" (selectionChange)="this.onDaySelect($event)">
+				<mat-select
+					value="{{ day }}"
+					(selectionChange)="this.onDaySelect($event)"
+				>
 					<mat-option value="1">Mandag</mat-option>
 					<mat-option value="2">Tirsdag</mat-option>
 					<mat-option value="3">Onsdag</mat-option>
@@ -12,18 +15,32 @@
 				</mat-select>
 			</mat-form-field>
 			<div class="input" *ngIf="this.week">
-				<ion-input class="week-input" type="number" placeholder="{{ week }}"
-					(change)="this.onWeekInput($event)">
+				<ion-input
+					class="week-input"
+					type="number"
+					placeholder="{{ week }}"
+					(change)="this.onWeekInput($event)"
+				>
 					<ion-label>Uke</ion-label>
 				</ion-input>
 			</div>
-			<ion-button (click)="openSettings()" class="icon" shape="round" fill="none">
+			<ion-button
+				(click)="openSettings()"
+				class="icon"
+				shape="round"
+				fill="none"
+			>
 				<ion-icon name="settings"></ion-icon>
 			</ion-button>
 		</div>
 	</ion-toolbar>
 </ion-header>
+
 <ion-content>
+	<ion-refresher slot="fixed" (ionRefresh)="ionRefresh($event)">
+		<ion-refresher-content></ion-refresher-content>
+	</ion-refresher>
+
 	<div *ngIf="src != null">
 		<pinch-zoom>
 			<img [src]="src" alt="" />

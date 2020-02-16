@@ -12,27 +12,31 @@ export class TimeplanService {
 		private downloader: Downloader,
 		private webview: WebView,
 		private file: File,
-		private userInfo: UserInfoService
+		private user: UserInfoService
 	) {}
 
-	public async base64(week: number, width: number, height: number) {
+	public async base64(
+		week: number,
+		width: number,
+		height: number,
+		useCache: boolean = true
+	) {
 		return new Promise<{
 			localPath: string;
 			webPath: string;
 			filename: string;
 		}>(async (resolve, reject) => {
-			console.log("base64 call timeplan service");
-			const userid = await this.userInfo.userId();
-			const schoolid = await this.userInfo.schoolId();
+			const userid = await this.user.userId();
+			const schoolid = await this.user.schoolId();
 
 			const filename = `full-timeplan${width}x${height}-${week}-${userid}-school${schoolid}.png`;
-			const dir = this.file.externalDataDirectory;
+			const dir = this.file.externalCacheDirectory;
 
 			const fileCached = await this.file
 				.checkFile(dir, filename)
 				.catch(_ => false);
 
-			if (fileCached) {
+			if (useCache && fileCached) {
 				const localPath = dir + filename;
 				const webPath = this.webview
 					.convertFileSrc(localPath)
@@ -51,8 +55,6 @@ export class TimeplanService {
 						destinationUri: dir + filename
 					})
 					.catch((error: any) => reject(error))) as string;
-
-				console.log(localPath);
 
 				const webPath = this.webview
 					.convertFileSrc(localPath)

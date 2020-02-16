@@ -17,8 +17,7 @@ import { IonicStorageModule } from "@ionic/storage";
 import { MatInputModule } from "@angular/material/input";
 
 import { HTTP } from "@ionic-native/http/ngx";
-import { ReactiveFormsModule, FormsModule } from "@angular/forms";
-import { LinkInputComponent } from "./components/link-input/link-input.component";
+import { AdMobFree } from "@ionic-native/admob-free/ngx";
 
 @NgModule({
 	declarations: [AppComponent],
@@ -36,6 +35,7 @@ import { LinkInputComponent } from "./components/link-input/link-input.component
 		Downloader,
 		WebView,
 		File,
+		AdMobFree,
 		HTTP,
 		{ provide: RouteReuseStrategy, useClass: IonicRouteStrategy }
 	],

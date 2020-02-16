@@ -12,7 +12,8 @@ h1 {
 }
 
 p {
-	font-size: 20px;
+	font-size: 18px;
+	margin-bottom: 0;
 }
 
 mat-form-field.link {
@@ -28,7 +29,7 @@ img.fill-in {
 
 	animation: pop-up 0.5s forwards ease-in;
 
-	margin-top: 30px;
+	margin-top: 15px;
 
 	z-index: -1;
 }

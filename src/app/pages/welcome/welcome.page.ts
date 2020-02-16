@@ -1,7 +1,5 @@
 import { Component, ViewChild, ElementRef } from "@angular/core";
 import { Router } from "@angular/router";
-import { UserInfoService } from "src/app/services/user-info.service";
-import { FormControl, Validators } from "@angular/forms";
 import { LinkInputComponent } from "src/app/components/link-input/link-input.component";
 
 @Component({
@@ -15,7 +13,7 @@ export class WelcomePage {
 
 	public processing = false;
 
-	constructor(private router: Router, private userInfo: UserInfoService) {}
+	constructor(private router: Router) {}
 
 	public async doneButton() {
 		const userInfo = await this.linkInput.submit().catch(error => null);
