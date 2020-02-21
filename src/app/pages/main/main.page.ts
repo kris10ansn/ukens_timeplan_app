@@ -37,12 +37,6 @@ export class MainPage implements OnInit {
 
 	public async ngOnInit() {
 		this.src = await this.loadPlan();
-
-		const r = Math.floor(Math.random() * 5);
-
-		if (r > 1) {
-			this.adMob.showInterstitial();
-		}
 	}
 
 	public ionViewDidEnter() {
@@ -51,6 +45,14 @@ export class MainPage implements OnInit {
 
 	public ionViewWillLeave() {
 		this.refresher.disabled = true;
+	}
+
+	public ionViewWillEnter() {
+		const r = Math.round(Math.random());
+
+		if (r === 1) {
+			this.adMob.showInterstitial();
+		}
 	}
 
 	public async reload() {
@@ -90,6 +92,8 @@ export class MainPage implements OnInit {
 
 	private async loadPlan(useCache: boolean = true) {
 		return new Promise<string>(async (resolve, reject) => {
+			this.status = "Henter plan...";
+
 			if (!this.deviceWidth || !this.deviceHeight) {
 				this.deviceWidth = this.platform.width();
 				this.deviceHeight = this.platform.height();

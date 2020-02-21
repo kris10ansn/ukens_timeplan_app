@@ -12,8 +12,9 @@ export class LinkInputComponent {
 	public element: ElementRef;
 
 	public pattern = new FormControl("", [
+		Validators.required,
 		Validators.pattern(
-			/(((https)|(http))\:\/\/)?(www.)?novasoftware.se\/webviewer\/\(S\(.*\)\)\/.*/i
+			/(((https)|(http))\:\/\/)?(www.)?novasoftware.se\/webviewer\/\(S\(.*\)\)\/.*(?=.*(schoolid\=))(?=.*(\&|\?)(id\=)).*/i
 		)
 	]);
 
@@ -28,10 +29,12 @@ export class LinkInputComponent {
 			this.processing = true;
 			this.element.nativeElement.blur();
 
+			console.log(this.element.nativeElement.value);
+
 			const userInfo = await this.userInfo
 				.from(this.element.nativeElement.value)
 				.catch(e => {
-					reject(null);
+					reject(e);
 					return null;
 				});
 
@@ -41,8 +44,6 @@ export class LinkInputComponent {
 				console.log(userInfo);
 				resolve(userInfo);
 			}
-
-			this.processing = false;
 		});
 	}
 }

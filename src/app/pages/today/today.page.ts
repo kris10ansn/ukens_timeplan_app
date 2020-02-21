@@ -145,7 +145,10 @@ export class TodayPage implements OnInit {
 
 			const filecached = await this.file
 				.checkFile(this.file.externalCacheDirectory, filename)
-				.catch(_ => false);
+				.catch(e => {
+					console.error(e, "checkFile");
+					return false;
+				});
 
 			if (filecached && useCache) {
 				const path = this.webview
@@ -160,7 +163,7 @@ export class TodayPage implements OnInit {
 				.base64(week, width * 5, height, useCache)
 				.catch(error => {
 					this.status = `Error: ${error}, prøv å laste inn på nytt`;
-					throw error;
+					console.error(error);
 				});
 
 			const { localPath } = response as any;

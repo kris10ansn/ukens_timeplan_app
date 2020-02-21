@@ -60,3 +60,10 @@ div.input {
 	--padding-start: 6px;
 	--padding-end: 6px;
 }
+
+ion-progress-bar {
+	width: 75%;
+	position: absolute;
+	left: 50%;
+	transform: translateX(-50%);
+}

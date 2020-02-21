@@ -1,9 +1,9 @@
 <?xml version='1.0' encoding='utf-8'?>
-<widget id="dev.kris10ansn.ukens-timeplan" version="0.0.4" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+<widget id="dev.kris10ansn.ukens-timeplan" version="0.0.5" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
     <name>Ukens Timeplan</name>
     <description>Se ukens eller dagens timeplan</description>
     <author email="nessa.kristian@gmail.com" href="https://kris10ansn.github.io/">Kristian Silli Nessa</author>
-    <content src="index.html" />
+    <content original-src="index.html" src="http://localhost:8100" />
     <access origin="*" />
     <allow-intent href="http://*/*" />
     <allow-intent href="https://*/*" />

@@ -25,7 +25,9 @@ export class UserInfoService {
 
 			const uri = new URL(url);
 
-			const response = await this.http.get(uri.href, {}, {});
+			const response = await this.http
+				.get(uri.href, {}, {})
+				.catch(error => null);
 
 			const doc = document.implementation.createHTMLDocument();
 			const webviewer = doc.createElement("html");
@@ -36,7 +38,7 @@ export class UserInfoService {
 			) as HTMLSelectElement;
 
 			const userId =
-				Number(studentSelect.value) > 0 ? studentSelect.value : null;
+				studentSelect.value === "0" ? null : studentSelect.value;
 			const schoolId = uri.searchParams.get("schoolid");
 
 			if (userId && schoolId) {
@@ -46,7 +48,7 @@ export class UserInfoService {
 
 				return resolve({ userId, schoolId, webviewerUrl });
 			} else {
-				return reject();
+				return reject("Info not found");
 			}
 		});
 	}

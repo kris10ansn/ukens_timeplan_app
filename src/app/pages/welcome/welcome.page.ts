@@ -11,12 +11,13 @@ export class WelcomePage {
 	@ViewChild("linkInput", { static: true })
 	private linkInput: LinkInputComponent;
 
-	public processing = false;
-
 	constructor(private router: Router) {}
 
 	public async doneButton() {
-		const userInfo = await this.linkInput.submit().catch(error => null);
+		const userInfo = await this.linkInput.submit().catch(error => {
+			console.error(error);
+			return null;
+		});
 
 		if (userInfo) {
 			this.router.navigate(["/tabs"]);
