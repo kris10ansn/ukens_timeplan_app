@@ -2,3 +2,13 @@ mat-form-field.link {
 	width: 100%;
 	font-size: 18px;
 }
+
+mat-form-field.align-center {
+	text-align: center;
+
+	mat-hint {
+		position: relative;
+		left: 50%;
+		transform: translateX(-50%);
+	}
+}

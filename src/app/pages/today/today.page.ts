@@ -60,8 +60,15 @@ export class TodayPage implements OnInit {
 	}
 
 	public async ionRefresh(event) {
+		const { floor, random } = Math;
+		const r = floor(random() * 5);
+
 		setTimeout(() => {
 			event.target.complete();
+
+			if (r > 1) {
+				this.adMob.showInterstitial();
+			}
 		}, 175);
 
 		this.src = null;
@@ -162,7 +169,12 @@ export class TodayPage implements OnInit {
 			const response = await this.timeplan
 				.base64(week, width * 5, height, useCache)
 				.catch(error => {
-					this.status = `Error: ${error}, prøv å laste inn på nytt`;
+					if (error === "PERMISSION DENIED") {
+						this.status =
+							"Kunne ikke hente planen. Vennligst tillat filtilgang for at dette skal fungere. Dra ned for å prøve på nytt.";
+					} else {
+						this.status = `Error: "${error}", dra ned for å laste inn på nytt`;
+					}
 					console.error(error);
 				});
 

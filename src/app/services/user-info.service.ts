@@ -70,6 +70,7 @@ export class UserInfoService {
 
 	public async isAuthenticated() {
 		return new Promise<boolean>(async resolve => {
+			return resolve(false);
 			const userid = await this.storage.get("userid");
 			const schoolid = await this.storage.get("schoolid");
 

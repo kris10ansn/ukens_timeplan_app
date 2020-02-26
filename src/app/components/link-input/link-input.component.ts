@@ -1,15 +1,29 @@
-import { Component, OnInit, ViewChild, ElementRef } from "@angular/core";
+import {
+	Component,
+	OnInit,
+	ViewChild,
+	ElementRef,
+	Input,
+	AfterViewInit
+} from "@angular/core";
 import { FormControl, Validators, AbstractControl } from "@angular/forms";
 import { UserInfoService } from "src/app/services/user-info.service";
+import { MatFormField } from "@angular/material/form-field";
 
 @Component({
 	selector: "app-link-input",
 	templateUrl: "./link-input.component.html",
 	styleUrls: ["./link-input.component.scss"]
 })
-export class LinkInputComponent {
+export class LinkInputComponent implements AfterViewInit {
 	@ViewChild("linkInput", { static: true })
 	public element: ElementRef;
+
+	@ViewChild(MatFormField, { static: false })
+	public formField: MatFormField;
+
+	@Input()
+	private alignCenter = false;
 
 	public pattern = new FormControl("", [
 		Validators.required,
@@ -24,12 +38,17 @@ export class LinkInputComponent {
 
 	constructor(private userInfo: UserInfoService) {}
 
+	public ngAfterViewInit() {
+		if (this.alignCenter) {
+			const { nativeElement } = this.formField._elementRef;
+			nativeElement.classList.add("align-center");
+		}
+	}
+
 	public async submit() {
 		return new Promise(async (resolve, reject) => {
 			this.processing = true;
 			this.element.nativeElement.blur();
-
-			console.log(this.element.nativeElement.value);
 
 			const userInfo = await this.userInfo
 				.from(this.element.nativeElement.value)
@@ -41,8 +60,7 @@ export class LinkInputComponent {
 			if (userInfo == null) {
 				this.processingError = true;
 			} else {
-				console.log(userInfo);
-				resolve(userInfo);
+				return resolve(userInfo);
 			}
 		});
 	}

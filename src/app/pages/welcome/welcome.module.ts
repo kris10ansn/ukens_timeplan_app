@@ -7,6 +7,7 @@ import { IonicModule } from "@ionic/angular";
 
 import { WelcomePage } from "./welcome.page";
 import { MatInputModule } from "@angular/material/input";
+import { MatButtonModule } from "@angular/material/button";
 import { ErrorStateMatcher } from "@angular/material/core";
 import { ComponentsModule } from "src/app/components/components.module";
 
@@ -23,6 +24,7 @@ const routes: Routes = [
 		FormsModule,
 		IonicModule,
 		MatInputModule,
+		MatButtonModule,
 		ReactiveFormsModule,
 		RouterModule.forChild(routes),
 		ComponentsModule

@@ -119,7 +119,12 @@ export class MainPage implements OnInit {
 			const { webPath } = await this.timeplan
 				.base64(week, width, height, useCache)
 				.catch(error => {
-					this.status = `Error: "${error}"`;
+					if (error === "PERMISSION DENIED") {
+						this.status =
+							"Kunne ikke hente planen. Vennligst tillat filtilgang for at dette skal fungere. Dra ned for å prøve på nytt.";
+					} else {
+						this.status = `Error: "${error}", dra ned for å laste inn på nytt`;
+					}
 					reject(null);
 					return { webPath: null };
 				});

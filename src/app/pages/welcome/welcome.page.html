@@ -1,28 +1,89 @@
-<div class="content">
-	<h1>Velkommen!</h1>
+<ion-content [fullscreen]="true">
+	<ion-slides #mainSlider [pager]="true" class="main">
+		<ion-slide>
+			<div class="slide">
+				<img src="assets/images/celebrate.svg" />
+				<h1>Hei, du!</h1>
+				<p>
+					Om <b>et par få steg</b> kommer du til å være klar til å se
+					dine timeplaner <b>mye mer effektivt</b>!
+				</p>
+				<br><br><br>
+				<p class="msg swipe-help">Swipe deg videre</p>
+			</div>
+		</ion-slide>
+		<ion-slide>
+			<div class="slide">
+				<img src="assets/images/link.svg" />
+				<h1>Vi trenger linken din</h1>
+				<p>
+					For å kunne hente din personlige timeplan hver dag trenger
+					vi <b>din link</b> til timeplanen.
+				</p>
+				<p>
+					Denne finner du vanligvis ved å gå til
+					<b>skolearena.no</b> og klikke på
+					<b>Timeplan i WebViewer</b>
+				</p>
+				<p class="msg">
+					Vi kan desverre ikke bruke felleslink fra f.eks. skolens
+					nettsted
+				</p>
+			</div>
+		</ion-slide>
+		<ion-slide>
+			<div class="slide">
+				<img src="assets/images/insert.svg">
+				<h1>Lim den inn nedenfor</h1>
+			
+				<app-link-input #linkInput [alignCenter]="true"></app-link-input>
+		
+				<p>Linken bør se cirka slik ut:</p>
+				<p class="link">http://<b>www.novasoftware.se</b>/webviewer/...<b>schoolid=</b><i>12345</i>&<b>code=</b><i>123456</i>&type=3&<b>id=</b><i>123</i></p>
+				<button mat-button (click)="showHelp()">Hvordan?</button>
+				<button mat-raised-button (click)="doneButton()">Ferdig</button>
+			</div>
+		</ion-slide>
+		<ion-slide>
+			<div class="slide">
+				<h1>Vi trenger filtilgang</h1>
+				<p>Du kommer snart til å bli <b>spurt om tillatelse</b>, og <b>for at appen skal fungere</b> trenger vi at du trykker <b>ja</b>.</p>
+				<img src="assets/images/files.svg">
+				<button (click)="allowButton()" mat-raised-button>Greit!</button>
+			</div>
+		</ion-slide>
+	</ion-slides>
 
-	<p>
-		Lim inn en link til timeplanen din (skolearena > timeplan i webviewer)
-		og sett i gang!
-	</p>
-	<app-link-input #linkInput></app-link-input>
-
-	<img class="fill-in" src="../../../assets/images/fill_in.svg" alt="" />
-
-	<div class="done-btn">
-		<ion-spinner
-			*ngIf="linkInput.processing"
-			name="crescent"
-			color="primary"
-		></ion-spinner>
-		<ion-button
-			*ngIf="!linkInput.processing"
-			(click)="doneButton()"
-			class="done"
-			color="primary"
-			[disabled]="linkInput.pattern.errors ? true : false"
-		>
-			Ferdig</ion-button
-		>
+	<div #helpPopup class="help popup hidden" (blur)="hideHelp()">
+		<ion-slides #helpSlides [pager]="true" [options]="{pagination:false}">
+			<ion-slide class="n-0">
+				<h3>Gå til</h3>
+				<a href="https://www.skolearena.no/" target="_blank"><img src="assets/images/skalogo.jpg" alt="SkoleArena"></a>
+				<p>Noen skoler krever at du åpner en link fra itslearning. Andre krever du logger inn via <a href="https://www.skolearena.no/" target="_blank">nettsiden</a></p>
+				<br>
+				<p class="msg">Swipe deg videre</p>
+			</ion-slide>
+			<ion-slide class="n-1">
+				<h3>Åpne timeplan i webviewer</h3>
+				<img src="assets/images/timeplan_i_webviewer.png" alt="">
+			</ion-slide>
+			<ion-slide class="n-2">
+				<h3>Trykk på adressefeltet øverst</h3>
+				<img src="assets/images/adressbar.jpg">
+				<p>(Dette er hvordan det ser ut i Google Chrome)</p>
+			</ion-slide>
+			<ion-slide class="n-3">
+				<h3>Kopier linken</h3>
+				<img src="assets/images/copy_adressbar.jpg">
+				<p>(Dette er hvordan det ser ut i Google Chrome)</p>
+			</ion-slide>
+			<ion-slide class="n-4">
+				<h3>Lim inn linken her</h3>
+				<p>Hold fingeren på søkefeltet og trykk lim inn</p>
+				<img src="assets/images/paste.png">
+				<button mat-raised-button (click)="hideHelp()">Greit</button>
+				<br>
+			</ion-slide>
+		</ion-slides>
 	</div>
-</div>
+</ion-content>
